@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pkgApp.controller.RetirementController">
+<BorderPane fx:id="mainPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="560.0" prefWidth="600.0" stylesheets="@application.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pkgApp.controller.RetirementController">
    <bottom>
       <HBox prefHeight="35.0" prefWidth="410.0" stylesheets="@application.css" BorderPane.alignment="CENTER">
          <children>
@@ -66,7 +66,7 @@
             <Label fx:id="lblMonthlySSI" text="Monthly SSI" GridPane.rowIndex="9" />
             <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="10">
                <children>
-                  <Button id="button-calc" mnemonicParsing="false" onAction="#btnCalculate" text="Calculate" />
+                  <Button id="button-calc" fx:id="btnCalc" mnemonicParsing="false" onAction="#btnCalculate" text="Calculate" />
                   <Button id="button-clear" mnemonicParsing="false" onAction="#btnClear" text="Clear">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />

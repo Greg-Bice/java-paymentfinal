@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.ResourceBundle;
+import javax.validation.Path.Node;
 import org.apache.poi.ss.formula.functions.FinanceLib;
 import com.sun.prism.paint.Color;
 import javafx.event.ActionEvent;
@@ -18,9 +19,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Tooltip;
 import javafx.stage.Stage;
 import javafx.util.converter.NumberStringConverter;
 import javafx.scene.control.Label;
+import javafx.geometry.Bounds;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.control.Button;
 import javafx.beans.value.*;
 import pkgApp.RetirementApp;
 import pkgCore.Retirement;
@@ -54,10 +60,16 @@ public class RetirementController implements Initializable {
 	private TextField txtMonthlySSI;
 	
 	@FXML
+	private BorderPane mainPane;
+	
+	@FXML
 	private Label lblSaveEachMonth, lblYearsToWork, lblWorkAnnualReturn;
 	
 	@FXML
 	private Label lblAmountNeedSave, lblYearsRetired, lblRetiredAnnualReturn, lblRequiredIncome, lblMonthlySSI;
+	
+	@FXML
+	private Button btnCalc;
 	
 	private HashMap<TextField, String> hmTextFieldRegEx = new HashMap<TextField, String>();
 	private HashMap<TextField, Label> hmLabelList = new HashMap<TextField, Label>();
@@ -94,6 +106,15 @@ public class RetirementController implements Initializable {
 		hmTextFieldRegEx.put( txtRequiredIncome, "\\d*?" );
 		hmTextFieldRegEx.put( txtMonthlySSI, "\\d*?" );
 		
+		txtYearsToWork.setTooltip( new Tooltip( "Should be an integer between 0 and 40. (Inclusive)" ) );
+		txtAnnualReturnWorking.setTooltip( new Tooltip( "Should be a number between 0% and 10%. (Inclusive)" ) );
+		txtAnnualReturnRetired.setTooltip( new Tooltip( "Should be a number between 0% and 10%. (Inclusive)" ) );
+		txtYearsRetired.setTooltip( new Tooltip( "Should be an integer between 0 and 20. (Inclusive)" ) );
+		txtRequiredIncome.setTooltip( new Tooltip( "Should be an integer between $2,642 and $10,000. (Inclusive)" ) );
+		txtRequiredIncome.setTooltip( new Tooltip( "Should be an integer between $0.00 and $2,642. (Inclusive)" ) );
+		
+		btnCalc.setTooltip( new Tooltip( "Entries required for all fields." ) );
+		
 		Iterator it = hmTextFieldRegEx.entrySet().iterator();
 		while ( it.hasNext() ) {
 			
@@ -115,8 +136,7 @@ public class RetirementController implements Initializable {
 						if ( !txtField.getText().matches( strRegEx ) ) {
 							
 							lblCompany.setTextFill( javafx.scene.paint.Color.web( "#ea8685" ) );
-							txtField.setText( "" );
-							txtField.requestFocus();
+							txtField.getTooltip().show( txtField, txtField.getScene().getWindow().getX() + txtField.getLayoutX(), txtField.getScene().getWindow().getY() + txtField.getLayoutY() );
 							
 						}
 					}
@@ -152,6 +172,19 @@ public class RetirementController implements Initializable {
 	@FXML
 	public void btnCalculate() {
 		
+		Iterator it = hmTextFieldRegEx.entrySet().iterator();
+		while ( it.hasNext() ) {
+			
+			Map.Entry pair = (Map.Entry) it.next();
+			TextField txtField = (TextField) pair.getKey();
+			
+			if (txtField.getText().isEmpty() ) { 
+				btnCalc.getTooltip().show( btnCalc, btnCalc.getScene().getWindow().getX() + btnCalc.getLayoutX(), btnCalc.getScene().getWindow().getY() + btnCalc.getLayoutY() );
+				return;
+			}
+			
+		}
+		
 		txtSaveEachMonth.setDisable( false );
 		txtWhatYouNeedToSave.setDisable( false );
 		
@@ -161,4 +194,5 @@ public class RetirementController implements Initializable {
 		txtSaveEachMonth.setText( "$" + NumberFormat.getInstance().format( ret.MonthlySavings() ) );
 		txtWhatYouNeedToSave.setText( "$" + NumberFormat.getInstance().format( ret.TotalAmountToSave() ) );
 	}
+
 }
