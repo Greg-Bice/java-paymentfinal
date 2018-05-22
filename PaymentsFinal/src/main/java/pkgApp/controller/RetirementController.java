@@ -141,6 +141,7 @@ public class RetirementController implements Initializable {
 			Map.Entry pair = (Map.Entry) it.next();
 			TextField txtField = (TextField) pair.getKey();
 			
+			
 			txtField.clear();
 			txtField.setDisable( false );
 			
